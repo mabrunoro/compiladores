@@ -1,0 +1,899 @@
+Terminais sem uso na gramática
+
+   GT
+
+
+Gramática
+
+    0 $accept: program $end
+
+    1 program: stmt_sequence
+
+    2 stmt_sequence: stmt_sequence stmt
+    3              | stmt
+
+    4 stmt: assign_stmt
+    5     | vardecl
+    6     | printstmt
+
+    7 $@1: %empty
+
+    8 vardecl: INT ID $@1 varlstint SEMI
+
+    9 $@2: %empty
+
+   10 vardecl: REAL ID $@2 varlstreal SEMI
+
+   11 $@3: %empty
+
+   12 vardecl: BOOL ID $@3 varlstbool SEMI
+
+   13 $@4: %empty
+
+   14 vardecl: STR ID $@4 varlststr SEMI
+
+   15 varlstint: %empty
+
+   16 $@5: %empty
+
+   17 varlstint: COMMA ID $@5 varlstint
+
+   18 varlstreal: %empty
+
+   19 $@6: %empty
+
+   20 varlstreal: COMMA ID $@6 varlstreal
+
+   21 varlstbool: %empty
+
+   22 $@7: %empty
+
+   23 varlstbool: COMMA ID $@7 varlstbool
+
+   24 varlststr: %empty
+
+   25 $@8: %empty
+
+   26 varlststr: COMMA ID $@8 varlststr
+
+   27 $@9: %empty
+
+   28 printstmt: PRINT ID $@9 SEMI
+
+   29 $@10: %empty
+
+   30 assign_stmt: ID $@10 ASSIGN expr SEMI
+
+   31 expr: expr LT expr
+   32     | expr EQ expr
+   33     | expr PLUS expr
+   34     | expr MINUS expr
+   35     | expr TIMES expr
+   36     | expr OVER expr
+   37     | LPAREN expr RPAREN
+   38     | STRING
+   39     | TRUE
+   40     | FALSE
+   41     | NUM
+   42     | DEC
+   43     | ID
+
+
+Terminais, com as regras onde eles aparecem
+
+$end (0) 0
+error (256)
+SEMI (258) 8 10 12 14 28 30
+LPAREN (259) 37
+RPAREN (260) 37
+COMMA (261) 17 20 23 26
+INT (262) 8
+REAL (263) 10
+BOOL (264) 12
+STR (265) 14
+TRUE (266) 39
+FALSE (267) 40
+ASSIGN (268) 30
+PRINT (269) 28
+STRING (270) 38
+DEC (271) 42
+NUM (272) 41
+ID (273) 8 10 12 14 17 20 23 26 28 30 43
+LT (274) 31
+GT (275)
+EQ (276) 32
+PLUS (277) 33
+MINUS (278) 34
+TIMES (279) 35
+OVER (280) 36
+
+
+Não terminais com as regras onde eles aparecem
+
+$accept (26)
+    à esquerda: 0
+program (27)
+    à esquerda: 1, à direita: 0
+stmt_sequence (28)
+    à esquerda: 2 3, à direita: 1 2
+stmt (29)
+    à esquerda: 4 5 6, à direita: 2 3
+vardecl (30)
+    à esquerda: 8 10 12 14, à direita: 5
+$@1 (31)
+    à esquerda: 7, à direita: 8
+$@2 (32)
+    à esquerda: 9, à direita: 10
+$@3 (33)
+    à esquerda: 11, à direita: 12
+$@4 (34)
+    à esquerda: 13, à direita: 14
+varlstint (35)
+    à esquerda: 15 17, à direita: 8 17
+$@5 (36)
+    à esquerda: 16, à direita: 17
+varlstreal (37)
+    à esquerda: 18 20, à direita: 10 20
+$@6 (38)
+    à esquerda: 19, à direita: 20
+varlstbool (39)
+    à esquerda: 21 23, à direita: 12 23
+$@7 (40)
+    à esquerda: 22, à direita: 23
+varlststr (41)
+    à esquerda: 24 26, à direita: 14 26
+$@8 (42)
+    à esquerda: 25, à direita: 26
+printstmt (43)
+    à esquerda: 28, à direita: 6
+$@9 (44)
+    à esquerda: 27, à direita: 28
+assign_stmt (45)
+    à esquerda: 30, à direita: 4
+$@10 (46)
+    à esquerda: 29, à direita: 30
+expr (47)
+    à esquerda: 31 32 33 34 35 36 37 38 39 40 41 42 43, à direita:
+    30 31 32 33 34 35 36 37
+
+
+Estado 0
+
+    0 $accept: . program $end
+
+    INT    deslocar, e ir ao estado 1
+    REAL   deslocar, e ir ao estado 2
+    BOOL   deslocar, e ir ao estado 3
+    STR    deslocar, e ir ao estado 4
+    PRINT  deslocar, e ir ao estado 5
+    ID     deslocar, e ir ao estado 6
+
+    program        ir ao estado 7
+    stmt_sequence  ir ao estado 8
+    stmt           ir ao estado 9
+    vardecl        ir ao estado 10
+    printstmt      ir ao estado 11
+    assign_stmt    ir ao estado 12
+
+
+Estado 1
+
+    8 vardecl: INT . ID $@1 varlstint SEMI
+
+    ID  deslocar, e ir ao estado 13
+
+
+Estado 2
+
+   10 vardecl: REAL . ID $@2 varlstreal SEMI
+
+    ID  deslocar, e ir ao estado 14
+
+
+Estado 3
+
+   12 vardecl: BOOL . ID $@3 varlstbool SEMI
+
+    ID  deslocar, e ir ao estado 15
+
+
+Estado 4
+
+   14 vardecl: STR . ID $@4 varlststr SEMI
+
+    ID  deslocar, e ir ao estado 16
+
+
+Estado 5
+
+   28 printstmt: PRINT . ID $@9 SEMI
+
+    ID  deslocar, e ir ao estado 17
+
+
+Estado 6
+
+   30 assign_stmt: ID . $@10 ASSIGN expr SEMI
+
+    $padrão  reduzir usando a regra 29 ($@10)
+
+    $@10  ir ao estado 18
+
+
+Estado 7
+
+    0 $accept: program . $end
+
+    $end  deslocar, e ir ao estado 19
+
+
+Estado 8
+
+    1 program: stmt_sequence .
+    2 stmt_sequence: stmt_sequence . stmt
+
+    INT    deslocar, e ir ao estado 1
+    REAL   deslocar, e ir ao estado 2
+    BOOL   deslocar, e ir ao estado 3
+    STR    deslocar, e ir ao estado 4
+    PRINT  deslocar, e ir ao estado 5
+    ID     deslocar, e ir ao estado 6
+
+    $padrão  reduzir usando a regra 1 (program)
+
+    stmt         ir ao estado 20
+    vardecl      ir ao estado 10
+    printstmt    ir ao estado 11
+    assign_stmt  ir ao estado 12
+
+
+Estado 9
+
+    3 stmt_sequence: stmt .
+
+    $padrão  reduzir usando a regra 3 (stmt_sequence)
+
+
+Estado 10
+
+    5 stmt: vardecl .
+
+    $padrão  reduzir usando a regra 5 (stmt)
+
+
+Estado 11
+
+    6 stmt: printstmt .
+
+    $padrão  reduzir usando a regra 6 (stmt)
+
+
+Estado 12
+
+    4 stmt: assign_stmt .
+
+    $padrão  reduzir usando a regra 4 (stmt)
+
+
+Estado 13
+
+    8 vardecl: INT ID . $@1 varlstint SEMI
+
+    $padrão  reduzir usando a regra 7 ($@1)
+
+    $@1  ir ao estado 21
+
+
+Estado 14
+
+   10 vardecl: REAL ID . $@2 varlstreal SEMI
+
+    $padrão  reduzir usando a regra 9 ($@2)
+
+    $@2  ir ao estado 22
+
+
+Estado 15
+
+   12 vardecl: BOOL ID . $@3 varlstbool SEMI
+
+    $padrão  reduzir usando a regra 11 ($@3)
+
+    $@3  ir ao estado 23
+
+
+Estado 16
+
+   14 vardecl: STR ID . $@4 varlststr SEMI
+
+    $padrão  reduzir usando a regra 13 ($@4)
+
+    $@4  ir ao estado 24
+
+
+Estado 17
+
+   28 printstmt: PRINT ID . $@9 SEMI
+
+    $padrão  reduzir usando a regra 27 ($@9)
+
+    $@9  ir ao estado 25
+
+
+Estado 18
+
+   30 assign_stmt: ID $@10 . ASSIGN expr SEMI
+
+    ASSIGN  deslocar, e ir ao estado 26
+
+
+Estado 19
+
+    0 $accept: program $end .
+
+    $padrão  aceitar
+
+
+Estado 20
+
+    2 stmt_sequence: stmt_sequence stmt .
+
+    $padrão  reduzir usando a regra 2 (stmt_sequence)
+
+
+Estado 21
+
+    8 vardecl: INT ID $@1 . varlstint SEMI
+
+    COMMA  deslocar, e ir ao estado 27
+
+    $padrão  reduzir usando a regra 15 (varlstint)
+
+    varlstint  ir ao estado 28
+
+
+Estado 22
+
+   10 vardecl: REAL ID $@2 . varlstreal SEMI
+
+    COMMA  deslocar, e ir ao estado 29
+
+    $padrão  reduzir usando a regra 18 (varlstreal)
+
+    varlstreal  ir ao estado 30
+
+
+Estado 23
+
+   12 vardecl: BOOL ID $@3 . varlstbool SEMI
+
+    COMMA  deslocar, e ir ao estado 31
+
+    $padrão  reduzir usando a regra 21 (varlstbool)
+
+    varlstbool  ir ao estado 32
+
+
+Estado 24
+
+   14 vardecl: STR ID $@4 . varlststr SEMI
+
+    COMMA  deslocar, e ir ao estado 33
+
+    $padrão  reduzir usando a regra 24 (varlststr)
+
+    varlststr  ir ao estado 34
+
+
+Estado 25
+
+   28 printstmt: PRINT ID $@9 . SEMI
+
+    SEMI  deslocar, e ir ao estado 35
+
+
+Estado 26
+
+   30 assign_stmt: ID $@10 ASSIGN . expr SEMI
+
+    LPAREN  deslocar, e ir ao estado 36
+    TRUE    deslocar, e ir ao estado 37
+    FALSE   deslocar, e ir ao estado 38
+    STRING  deslocar, e ir ao estado 39
+    DEC     deslocar, e ir ao estado 40
+    NUM     deslocar, e ir ao estado 41
+    ID      deslocar, e ir ao estado 42
+
+    expr  ir ao estado 43
+
+
+Estado 27
+
+   17 varlstint: COMMA . ID $@5 varlstint
+
+    ID  deslocar, e ir ao estado 44
+
+
+Estado 28
+
+    8 vardecl: INT ID $@1 varlstint . SEMI
+
+    SEMI  deslocar, e ir ao estado 45
+
+
+Estado 29
+
+   20 varlstreal: COMMA . ID $@6 varlstreal
+
+    ID  deslocar, e ir ao estado 46
+
+
+Estado 30
+
+   10 vardecl: REAL ID $@2 varlstreal . SEMI
+
+    SEMI  deslocar, e ir ao estado 47
+
+
+Estado 31
+
+   23 varlstbool: COMMA . ID $@7 varlstbool
+
+    ID  deslocar, e ir ao estado 48
+
+
+Estado 32
+
+   12 vardecl: BOOL ID $@3 varlstbool . SEMI
+
+    SEMI  deslocar, e ir ao estado 49
+
+
+Estado 33
+
+   26 varlststr: COMMA . ID $@8 varlststr
+
+    ID  deslocar, e ir ao estado 50
+
+
+Estado 34
+
+   14 vardecl: STR ID $@4 varlststr . SEMI
+
+    SEMI  deslocar, e ir ao estado 51
+
+
+Estado 35
+
+   28 printstmt: PRINT ID $@9 SEMI .
+
+    $padrão  reduzir usando a regra 28 (printstmt)
+
+
+Estado 36
+
+   37 expr: LPAREN . expr RPAREN
+
+    LPAREN  deslocar, e ir ao estado 36
+    TRUE    deslocar, e ir ao estado 37
+    FALSE   deslocar, e ir ao estado 38
+    STRING  deslocar, e ir ao estado 39
+    DEC     deslocar, e ir ao estado 40
+    NUM     deslocar, e ir ao estado 41
+    ID      deslocar, e ir ao estado 42
+
+    expr  ir ao estado 52
+
+
+Estado 37
+
+   39 expr: TRUE .
+
+    $padrão  reduzir usando a regra 39 (expr)
+
+
+Estado 38
+
+   40 expr: FALSE .
+
+    $padrão  reduzir usando a regra 40 (expr)
+
+
+Estado 39
+
+   38 expr: STRING .
+
+    $padrão  reduzir usando a regra 38 (expr)
+
+
+Estado 40
+
+   42 expr: DEC .
+
+    $padrão  reduzir usando a regra 42 (expr)
+
+
+Estado 41
+
+   41 expr: NUM .
+
+    $padrão  reduzir usando a regra 41 (expr)
+
+
+Estado 42
+
+   43 expr: ID .
+
+    $padrão  reduzir usando a regra 43 (expr)
+
+
+Estado 43
+
+   30 assign_stmt: ID $@10 ASSIGN expr . SEMI
+   31 expr: expr . LT expr
+   32     | expr . EQ expr
+   33     | expr . PLUS expr
+   34     | expr . MINUS expr
+   35     | expr . TIMES expr
+   36     | expr . OVER expr
+
+    SEMI   deslocar, e ir ao estado 53
+    LT     deslocar, e ir ao estado 54
+    EQ     deslocar, e ir ao estado 55
+    PLUS   deslocar, e ir ao estado 56
+    MINUS  deslocar, e ir ao estado 57
+    TIMES  deslocar, e ir ao estado 58
+    OVER   deslocar, e ir ao estado 59
+
+
+Estado 44
+
+   17 varlstint: COMMA ID . $@5 varlstint
+
+    $padrão  reduzir usando a regra 16 ($@5)
+
+    $@5  ir ao estado 60
+
+
+Estado 45
+
+    8 vardecl: INT ID $@1 varlstint SEMI .
+
+    $padrão  reduzir usando a regra 8 (vardecl)
+
+
+Estado 46
+
+   20 varlstreal: COMMA ID . $@6 varlstreal
+
+    $padrão  reduzir usando a regra 19 ($@6)
+
+    $@6  ir ao estado 61
+
+
+Estado 47
+
+   10 vardecl: REAL ID $@2 varlstreal SEMI .
+
+    $padrão  reduzir usando a regra 10 (vardecl)
+
+
+Estado 48
+
+   23 varlstbool: COMMA ID . $@7 varlstbool
+
+    $padrão  reduzir usando a regra 22 ($@7)
+
+    $@7  ir ao estado 62
+
+
+Estado 49
+
+   12 vardecl: BOOL ID $@3 varlstbool SEMI .
+
+    $padrão  reduzir usando a regra 12 (vardecl)
+
+
+Estado 50
+
+   26 varlststr: COMMA ID . $@8 varlststr
+
+    $padrão  reduzir usando a regra 25 ($@8)
+
+    $@8  ir ao estado 63
+
+
+Estado 51
+
+   14 vardecl: STR ID $@4 varlststr SEMI .
+
+    $padrão  reduzir usando a regra 14 (vardecl)
+
+
+Estado 52
+
+   31 expr: expr . LT expr
+   32     | expr . EQ expr
+   33     | expr . PLUS expr
+   34     | expr . MINUS expr
+   35     | expr . TIMES expr
+   36     | expr . OVER expr
+   37     | LPAREN expr . RPAREN
+
+    RPAREN  deslocar, e ir ao estado 64
+    LT      deslocar, e ir ao estado 54
+    EQ      deslocar, e ir ao estado 55
+    PLUS    deslocar, e ir ao estado 56
+    MINUS   deslocar, e ir ao estado 57
+    TIMES   deslocar, e ir ao estado 58
+    OVER    deslocar, e ir ao estado 59
+
+
+Estado 53
+
+   30 assign_stmt: ID $@10 ASSIGN expr SEMI .
+
+    $padrão  reduzir usando a regra 30 (assign_stmt)
+
+
+Estado 54
+
+   31 expr: expr LT . expr
+
+    LPAREN  deslocar, e ir ao estado 36
+    TRUE    deslocar, e ir ao estado 37
+    FALSE   deslocar, e ir ao estado 38
+    STRING  deslocar, e ir ao estado 39
+    DEC     deslocar, e ir ao estado 40
+    NUM     deslocar, e ir ao estado 41
+    ID      deslocar, e ir ao estado 42
+
+    expr  ir ao estado 65
+
+
+Estado 55
+
+   32 expr: expr EQ . expr
+
+    LPAREN  deslocar, e ir ao estado 36
+    TRUE    deslocar, e ir ao estado 37
+    FALSE   deslocar, e ir ao estado 38
+    STRING  deslocar, e ir ao estado 39
+    DEC     deslocar, e ir ao estado 40
+    NUM     deslocar, e ir ao estado 41
+    ID      deslocar, e ir ao estado 42
+
+    expr  ir ao estado 66
+
+
+Estado 56
+
+   33 expr: expr PLUS . expr
+
+    LPAREN  deslocar, e ir ao estado 36
+    TRUE    deslocar, e ir ao estado 37
+    FALSE   deslocar, e ir ao estado 38
+    STRING  deslocar, e ir ao estado 39
+    DEC     deslocar, e ir ao estado 40
+    NUM     deslocar, e ir ao estado 41
+    ID      deslocar, e ir ao estado 42
+
+    expr  ir ao estado 67
+
+
+Estado 57
+
+   34 expr: expr MINUS . expr
+
+    LPAREN  deslocar, e ir ao estado 36
+    TRUE    deslocar, e ir ao estado 37
+    FALSE   deslocar, e ir ao estado 38
+    STRING  deslocar, e ir ao estado 39
+    DEC     deslocar, e ir ao estado 40
+    NUM     deslocar, e ir ao estado 41
+    ID      deslocar, e ir ao estado 42
+
+    expr  ir ao estado 68
+
+
+Estado 58
+
+   35 expr: expr TIMES . expr
+
+    LPAREN  deslocar, e ir ao estado 36
+    TRUE    deslocar, e ir ao estado 37
+    FALSE   deslocar, e ir ao estado 38
+    STRING  deslocar, e ir ao estado 39
+    DEC     deslocar, e ir ao estado 40
+    NUM     deslocar, e ir ao estado 41
+    ID      deslocar, e ir ao estado 42
+
+    expr  ir ao estado 69
+
+
+Estado 59
+
+   36 expr: expr OVER . expr
+
+    LPAREN  deslocar, e ir ao estado 36
+    TRUE    deslocar, e ir ao estado 37
+    FALSE   deslocar, e ir ao estado 38
+    STRING  deslocar, e ir ao estado 39
+    DEC     deslocar, e ir ao estado 40
+    NUM     deslocar, e ir ao estado 41
+    ID      deslocar, e ir ao estado 42
+
+    expr  ir ao estado 70
+
+
+Estado 60
+
+   17 varlstint: COMMA ID $@5 . varlstint
+
+    COMMA  deslocar, e ir ao estado 27
+
+    $padrão  reduzir usando a regra 15 (varlstint)
+
+    varlstint  ir ao estado 71
+
+
+Estado 61
+
+   20 varlstreal: COMMA ID $@6 . varlstreal
+
+    COMMA  deslocar, e ir ao estado 29
+
+    $padrão  reduzir usando a regra 18 (varlstreal)
+
+    varlstreal  ir ao estado 72
+
+
+Estado 62
+
+   23 varlstbool: COMMA ID $@7 . varlstbool
+
+    COMMA  deslocar, e ir ao estado 31
+
+    $padrão  reduzir usando a regra 21 (varlstbool)
+
+    varlstbool  ir ao estado 73
+
+
+Estado 63
+
+   26 varlststr: COMMA ID $@8 . varlststr
+
+    COMMA  deslocar, e ir ao estado 33
+
+    $padrão  reduzir usando a regra 24 (varlststr)
+
+    varlststr  ir ao estado 74
+
+
+Estado 64
+
+   37 expr: LPAREN expr RPAREN .
+
+    $padrão  reduzir usando a regra 37 (expr)
+
+
+Estado 65
+
+   31 expr: expr . LT expr
+   31     | expr LT expr .
+   32     | expr . EQ expr
+   33     | expr . PLUS expr
+   34     | expr . MINUS expr
+   35     | expr . TIMES expr
+   36     | expr . OVER expr
+
+    PLUS   deslocar, e ir ao estado 56
+    MINUS  deslocar, e ir ao estado 57
+    TIMES  deslocar, e ir ao estado 58
+    OVER   deslocar, e ir ao estado 59
+
+    $padrão  reduzir usando a regra 31 (expr)
+
+
+Estado 66
+
+   31 expr: expr . LT expr
+   32     | expr . EQ expr
+   32     | expr EQ expr .
+   33     | expr . PLUS expr
+   34     | expr . MINUS expr
+   35     | expr . TIMES expr
+   36     | expr . OVER expr
+
+    PLUS   deslocar, e ir ao estado 56
+    MINUS  deslocar, e ir ao estado 57
+    TIMES  deslocar, e ir ao estado 58
+    OVER   deslocar, e ir ao estado 59
+
+    $padrão  reduzir usando a regra 32 (expr)
+
+
+Estado 67
+
+   31 expr: expr . LT expr
+   32     | expr . EQ expr
+   33     | expr . PLUS expr
+   33     | expr PLUS expr .
+   34     | expr . MINUS expr
+   35     | expr . TIMES expr
+   36     | expr . OVER expr
+
+    TIMES  deslocar, e ir ao estado 58
+    OVER   deslocar, e ir ao estado 59
+
+    $padrão  reduzir usando a regra 33 (expr)
+
+
+Estado 68
+
+   31 expr: expr . LT expr
+   32     | expr . EQ expr
+   33     | expr . PLUS expr
+   34     | expr . MINUS expr
+   34     | expr MINUS expr .
+   35     | expr . TIMES expr
+   36     | expr . OVER expr
+
+    TIMES  deslocar, e ir ao estado 58
+    OVER   deslocar, e ir ao estado 59
+
+    $padrão  reduzir usando a regra 34 (expr)
+
+
+Estado 69
+
+   31 expr: expr . LT expr
+   32     | expr . EQ expr
+   33     | expr . PLUS expr
+   34     | expr . MINUS expr
+   35     | expr . TIMES expr
+   35     | expr TIMES expr .
+   36     | expr . OVER expr
+
+    $padrão  reduzir usando a regra 35 (expr)
+
+
+Estado 70
+
+   31 expr: expr . LT expr
+   32     | expr . EQ expr
+   33     | expr . PLUS expr
+   34     | expr . MINUS expr
+   35     | expr . TIMES expr
+   36     | expr . OVER expr
+   36     | expr OVER expr .
+
+    $padrão  reduzir usando a regra 36 (expr)
+
+
+Estado 71
+
+   17 varlstint: COMMA ID $@5 varlstint .
+
+    $padrão  reduzir usando a regra 17 (varlstint)
+
+
+Estado 72
+
+   20 varlstreal: COMMA ID $@6 varlstreal .
+
+    $padrão  reduzir usando a regra 20 (varlstreal)
+
+
+Estado 73
+
+   23 varlstbool: COMMA ID $@7 varlstbool .
+
+    $padrão  reduzir usando a regra 23 (varlstbool)
+
+
+Estado 74
+
+   26 varlststr: COMMA ID $@8 varlststr .
+
+    $padrão  reduzir usando a regra 26 (varlststr)

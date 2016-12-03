@@ -1,0 +1,6 @@
+4: x -> ID
+4: := -> ASSIGN
+4: 4 -> NUM
+4: . -> UNKNOWN
+4: 2 -> NUM
+4: ; -> SEMI

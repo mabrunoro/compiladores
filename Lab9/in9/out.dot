@@ -1,0 +1,14 @@
+digraph {
+graph [ordering="out"];
+node0[label="program"];
+node1[label="stmt_sequence"];
+node2[label="stmt"];
+node3[label="putsstmt"];
+node4[label="puts"];
+node3 -> node4;
+node5[label="id"];
+node3 -> node5;
+node2 -> node3;
+node1 -> node2;
+node0 -> node1;
+}

@@ -1,0 +1,11 @@
+int x,y;
+real z;
+string s;
+bool b, c;
+x := 10;
+y := 20;
+b := x < y;
+c := false;
+s := "y = " + y;
+print s;
+print b;
