@@ -41,6 +41,26 @@ void addchild(tree *p, tree *c)
 	}
 }
 
+tree* getchild(tree *p)
+{
+	return p->child;
+}
+
+tree* getbrother(tree *s)
+{
+	return s->brother;
+}
+
+int gettval(tree *n)
+{
+	return n->tval;
+}
+
+tipo getkind(tree *n)
+{
+	return n->kind;
+}
+
 tree* newsubtree(tipo p, int j, int c, ...)
 {
 	int i;
@@ -64,7 +84,7 @@ void printnode(tree *node, int level)
 		printnode(n, level+1);
 }
 
-void print(tree *t)
+void printtree(tree *t)
 {
 	printf("Início\n");
 	printnode(t, 0);

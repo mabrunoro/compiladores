@@ -2,7 +2,6 @@
  * Author: Marco Thome
  * Date: September 04, 2016
  */
- 
 
 %option outfile="scanner.c"
 %option noyywrap
@@ -10,8 +9,10 @@
 %option noinput
 						/* Reconhece código C-minus.						*/
 %{
+#include <stdio.h>
+#include <stdlib.h>
 #include "table.h"
-//#include "tree.h"
+#include "tree.h"
 #include "parser.h"
 void ferro();			/* Função para imprimir UNKNOWN 					*/
 #define _POSIX_SOURCE 1

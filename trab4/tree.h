@@ -53,9 +53,17 @@ tree* newnode(tipo p,int i);
 
 void addchild(tree *p, tree *c);
 
+tree* getchild(tree *n);
+
+tree* getbrother(tree *n);
+
+int gettval(tree *n);
+
+tipo getkind(tree *n);
+
 tree* newsubtree(tipo p, int j, int c, ...);
 
-void print(tree *t);
+void printtree(tree *t);
 
 void printnode(tree *node, int level);
 

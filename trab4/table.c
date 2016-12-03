@@ -12,10 +12,10 @@ static const char *TSTRING[] = {
 	"void"
 };
 
-const char* gettext(int type)
-{
-	return TSTRING[type];
-}
+// const char* getext(int type)
+// {
+// 	return TSTRING[type];
+// }
 
 // Literals Table
 // ----------------------------------------------------------------------------
@@ -38,7 +38,8 @@ littab* createlittab()
 
 int addliteral(littab* lt, char* s)
 {
-	for (int i = 0; i < lt->size; i++)
+	int i;
+	for (i = 0; i < lt->size; i++)
 	{
 		if (strcmp(lt->t[i], s) == 0)
 		{
@@ -51,7 +52,7 @@ int addliteral(littab* lt, char* s)
 	return old_side;
 }
 
-char* getliteral(littab* lt, int i)
+const char* getliteral(littab* lt, int i)
 {
 	return lt->t[i];
 }
@@ -59,7 +60,8 @@ char* getliteral(littab* lt, int i)
 void printlittab(littab* lt)
 {
 	printf("Literals table:\n");
-	for (int i = 0; i < lt->size; i++)
+	int i;
+	for (i = 0; i < lt->size; i++)
 	{
 		printf("Entry %d -- %s\n", i, getliteral(lt, i));
 	}
@@ -84,7 +86,8 @@ struct scotable
 scotab* createscotab()
 {
 	scotab *sct = malloc(sizeof *sct);
-	for(int i = 0; i < SCOPE_MAX_SIZE; i++)
+	int i;
+	for(i = 0; i < SCOPE_MAX_SIZE; i++)
 		sct->superior[i] = -1;
 	sct->size = 1;
 	return sct;
@@ -142,7 +145,8 @@ symtab* createsymtab()
 
 int lookupvar(symtab* st, int lpos, int sco)
 {
-	for(int i = 0; i < st->size; i++)
+	int i;
+	for(i = 0; i < st->size; i++)
 	{
 		if((st->t[i].name == lpos) && (st->t[i].scope == sco))
 			return i;
@@ -180,7 +184,7 @@ void setvartype(symtab* st, int i, int type)
 	st->t[i].type = type;
 }
 
-char* getvarname(symtab* st, littab* lt, int i)
+const char* getvarname(symtab* st, littab* lt, int i)
 {
 	return lt->t[st->t[i].name];
 }
@@ -208,7 +212,8 @@ void removelastvar(symtab* st)
 void printsymtab(symtab* st,scotab* sct,littab* lt)
 {
 	printf("Symbols table:\n");
-	for (int i = 0; i < st->size; i++)
+	int i;
+	for (i = 0; i < st->size; i++)
 	{
 		printf("Entry %d -- name: %s, line: %d, scope: %d, sup. scope: %d, type %s\n", i,
 		getvarname(st,lt,i), getvarline(st, i),getvarscop(st,i),supscope(sct, getvarscop(st, i)), TSTRING[getvartype(st, i)]);
@@ -232,7 +237,7 @@ typedef struct
 	int name;
 	int line;
 	int param;
-	tree *body;
+	tree *decl;
 }Fentry;
 
 struct funtable
@@ -284,10 +289,10 @@ int lookupfun(funtab* ft,int lp,int p)
 
 void setfunnode(funtab* ft, int fpos, tree* ar)
 {
-	ft->t[fpos].body = ar;
+	ft->t[fpos].decl = ar;
 }
 
-char* getfunname(funtab* ft, littab* lt, int i)
+const char* getfunname(funtab* ft, littab* lt, int i)
 {
 	if(i >= ft->size)
 		return "";
@@ -322,7 +327,8 @@ int getfuntype(funtab* ft,int i)
 void printfuntab(funtab* ft,littab* lt)
 {
 	printf("Functions table:\n");
-	for (int i = 0; i < ft->size; i++)
+	int i;
+	for (i = 0; i < ft->size; i++)
 	{
 		printf("Entry %d -- name: %s, line: %d, arid: %d, type %s\n", i,
 		getfunname(ft, lt, i), getfunline(ft, i), getfunparam(ft,i), TSTRING[getfuntype(ft, i)]);

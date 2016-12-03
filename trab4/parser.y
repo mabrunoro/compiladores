@@ -325,20 +325,18 @@ int main() {
 
  	if(yyparse() == 0)
 	{
-		printdot(arv);
-		/*print(arv);
+		//printdot(arv);
+		/*printtree(arv);
 		printf("PARSE SUCESSFUL!\n");*/
-    /*inipilha();
-    runast(arv);
-    finpilha();*/
+    
+    inipilha();
+    stdin = fopen(ctermid(NULL), "r");
+    execast(arv,ft,st,lt);
+    finpilha();
 	}
 	/*printlittab(lt);
 	printsymtab(st,sct,lt);
 	printfuntab(ft,lt);*/
-
-  stdin = fopen(ctermid(NULL), "r");
-
-  execast(arv,ft,st,lt);
 
 	freetree(arv);
 	freefuntab(ft);

@@ -1,4 +1,3 @@
-
 #ifndef TABLE_H
 #define TABLE_H
 
@@ -20,7 +19,7 @@ littab* createlittab();
 int addliteral(littab* lt, char* s);
 
 // Returns a pointer to the string stored at index 'i'.
-char* getliteral(littab* lt, int i);
+const char* getliteral(littab* lt, int i);
 
 // Prints the given table to stdout.
 void printlittab(littab* lt);
@@ -66,7 +65,7 @@ int searchvar(symtab* st, scotab* sct, int lpos, int sco);
 
 // Returns the variable name stored at the given index.
 // No check is made by this function, so make sure that the index is valid first.
-char* getvarname(symtab* st, littab* lt, int i);
+const char* getvarname(symtab* st, littab* lt, int i);
 
 int getvarscop(symtab* st, int i);
 
@@ -94,7 +93,7 @@ int lookupfun(funtab* ft,int lp,int p);
 
 void setfunnode(funtab* ft, int fpos, tree* ar);
 
-char* getfunname(funtab* ft, littab* lt, int i);
+const char* getfunname(funtab* ft, littab* lt, int i);
 
 int getfunline(funtab* ft, int i);
 

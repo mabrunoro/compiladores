@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "interpreter.h"
 
 int *pilha;
@@ -14,8 +15,8 @@ littab *lt;
 void inipilha()
 {
 	pos = 0;
-	chamada = false;
-	pilha = malloc(STACKSIZE * (sizeof int));
+	chamada = 0;
+	pilha = (int *)malloc(STACKSIZE * (sizeof(int)));
 }
 
 void finpilha()
@@ -26,7 +27,9 @@ void finpilha()
 
 void store(int var,int i)
 {
+	// printf("%d, %d\n",var,i);
 	pilha[var] = i;
+	// printf("Guardado!\n");
 }
 
 int recover(int var)
@@ -35,171 +38,190 @@ int recover(int var)
 }
 
 int runast(tree *astree) {
-	switch(astree->tipo)
+	switch(getkind(astree))
 	{
-		PROGRAM:
-		// return runprogramnode(astree);
-		break;
+		case PROGRAM:
+			return runprogramnode(astree);
+			break;
 
-		FUNCDECLLIST:
-		// return runfuncdecllistnode(astree);
-		break;
+		case FUNCDECLLIST:
+			return runfuncdecllistnode(astree);
+			break;
 
-		FUNCDECL:
-		// return runfuncdeclnode(astree);
-		break;
+		case FUNCDECL:
+			return runfuncdeclnode(astree);
+			break;
 
-		FUNCHEADER:
-		// return runfuncheadernode(astree);
-		break;
+		case FUNCHEADER:
+			return runfuncheadernode(astree);
+			break;
 
-		FUNCBODY:
-		// return runfuncbodynode(astree);
-		break;
+		case FUNCBODY:
+			return runfuncbodynode(astree);
+			break;
 
-		OPTVARDECL:
-		return runoptvardeclnode(astree);
-		break;
+		case OPTVARDECL:
+			return runoptvardeclnode(astree);
+			break;
 
-		OPTSTMTLIST:
-		return runoptstmtlistnode(astree);
-		break;
+		case OPTSTMTLIST:
+			return runoptstmtlistnode(astree);
+			break;
 
-		RETTYPE:
-		// return runrettypenode(astree);
-		break;
+		case RETTYPE:
+			return runrettypenode(astree);
+			break;
 
-		PARAMS:
-		// return runparamsnode(astree);
-		break;
+		case PARAMS:
+			return runparamsnode(astree);
+			break;
 
-		PARAMLIST:
-		// return runparamlistnode(astree);
-		break;
+		case PARAMLIST:
+			return runparamlistnode(astree);
+			break;
 
-		PARAM:
-		// return runparamnode(astree);
-		break;
+		case PARAM:
+			return runparamnode(astree);
+			break;
 
-		VARDECLLIST:
-		return runvardecllistnode(astree);
-		break;
+		case VARDECLLIST:
+			return runvardecllistnode(astree);
+			break;
 
-		VARDECL:
-		return runvardeclnode(astree);
-		break;
+		case VARDECL:
+			return runvardeclnode(astree);
+			break;
 
-		STMTLIST:
-		return runstmtlistnode(astree);
-		break;
+		case STMTLIST:
+			return runstmtlistnode(astree);
+			break;
 
-		STMT:
-		return runstmtnode(astree);
-		break;
+		case STMT:
+			return runstmtnode(astree);
+			break;
 
-		ASSIGNSTMT:
-		return runassignstmtnode(astree);
-		break;
+		case ASSIGNSTMT:
+			return runassignstmtnode(astree);
+			break;
 
-		LVAL:
-		return runlvalnode(astree);
-		break;
+		case LVAL:
+			return runlvalnode(astree);
+			break;
 
-		IFSTMT:
-		return runifstmtnode(astree);
-		break;
+		case IFSTMT:
+			return runifstmtnode(astree);
+			break;
 
-		BLOCK:
-		return runblocknode(astree);
-		break;
+		case BLOCK:
+			return runblocknode(astree);
+			break;
 
-		WHILESTMT:
-		return runwhilestmtnode(astree);
-		break;
+		case WHILESTMT:
+			return runwhilestmtnode(astree);
+			break;
 
-		RETURNSTMT:
-		return runreturnstmtnode(astree);
-		break;
+		case RETURNSTMT:
+			return runreturnstmtnode(astree);
+			break;
 
-		FUNCCAL:
-		// return runfunccallnode(astree);
-		break;
+		case FUNCCALL:
+			// return runfunccallnode(astree);
+			break;
 
-		INPUTCALL:
-		return runinputcallnode(astree);
-		break;
+		case INPUTCALL:
+			return runinputcallnode(astree);
+			break;
 
-		OUTPUTCALL:
-		return runoutputcallnode(astree);
-		break;
+		case OUTPUTCALL:
+			return runoutputcallnode(astree);
+			break;
 
-		WRITECALL:
-		return runwritecallnode(astree);
-		break;
+		case WRITECALL:
+			return runwritecallnode(astree);
+			break;
 
-		USERFUNCCALL:
-		// return runuserfunccallnode(astree);
-		break;
+		case USERFUNCCALL:
+			// return runuserfunccallnode(astree);
+			break;
 
-		OPTARGLIST:
-		return runoptarglistnode(astree);
-		break;
+		case OPTARGLIST:
+			return runoptarglistnode(astree);
+			break;
 
-		ARGLIST:
-		return runarglistnode(astree);
-		break;
+		case ARGLIST:
+			return runarglistnode(astree);
+			break;
 
-		BOOLEXPR:
-		return runboolexprnode(astree);
-		break;
+		case BOOLEXPR:
+			return runboolexprnode(astree);
+			break;
 
-		BOOLOP:
-		return runboolopnode(astree);
-		break;
+		case BOOLOP:
+			return runboolopnode(astree);
+			break;
 
-		ARITHEXPR:
-		return runarithexprnode(astree);
-		break;
+		case ARITHEXPR:
+			return runarithexprnode(astree);
+			break;
 
-		IDN:
-		return runidnnode(astree);
-		break;
+		case IDN:
+			return runidnnode(astree);
+			break;
 
-		STRINGN:
-		return runstringnnode(astree);
-		break;
+		case STRINGN:
+			return runstringnnode(astree);
+			break;
+
+		case NUMN:
+			return runnumnnode(astree);
+			break;
 	}
 	return -1;
   printf("Root: %p\n", astree);
 }
 
-// int runprogramnode(tree* node)
-// {
-// 	runast(node->child);
-// 	return -1;
-// }
-//
-// int runfuncdecllistnode(tree* node)
-// {
-// }
+int runprogramnode(tree* node)
+{
+	runast(getchild(node));
+	return -1;
+}
 
-// int runfuncdeclnode(tree* node)
-// {
-//
-// }
-//
-// int runfuncheadernode(tree* node)
-// {
-// }
-//
-// int runfuncbodynode(tree* node)
-// {
-// }
+int runfuncdecllistnode(tree* node)
+{
+	tree *i;
+	for(i = getchild(node); getbrother(i) != NULL; i = getbrother(i))
+		runast(i);
+	chamada = 1;
+	runast(i);
+	return -1;
+}
+
+int runfuncdeclnode(tree* node)
+{
+	if(chamada == 0)
+		return -1;
+	else
+		runast(getbrother(getchild(node)));
+	return -1;
+}
+
+int runfuncheadernode(tree* node)
+{
+	return -1;
+}
+
+int runfuncbodynode(tree* node)
+{
+	tree *i;
+	for(i = getchild(node); i != NULL; i = getbrother(i))
+		runast(i);
+	return -1;
+}
 
 int runoptvardeclnode(tree* node)
 {
 	tree *i;
-	for(i = node->child; i != NULL; i = i->brother)
+	for(i = getchild(node); i != NULL; i = getbrother(i))
 		runast(i);
 	return -1;
 }
@@ -207,31 +229,35 @@ int runoptvardeclnode(tree* node)
 int runoptstmtlistnode(tree* node)
 {
 	tree *i;
-	for(i = node->child; i != NULL; i = i->brother)
+	for(i = getchild(node); i != NULL; i = getbrother(i))
 		runast(i);
 	return -1;
 }
 
-// int runrettypenode(tree* node)
-// {
-// }
-//
-// int runparamsnode(tree* node)
-// {
-// }
-//
-// int runparamlistnode(tree* node)
-// {
-// }
-//
-// int runparamnode(tree* node)
-// {
-// }
+int runrettypenode(tree* node)
+{
+	return -1;
+}
+
+int runparamsnode(tree* node)
+{
+	return -1;
+}
+
+int runparamlistnode(tree* node)
+{
+	return -1;
+}
+
+int runparamnode(tree* node)
+{
+	return -1;
+}
 
 int runvardecllistnode(tree* node)
 {
 	tree *i;
-	for(i = node->child; i != NULL; i = i->brother)
+	for(i = getchild(node); i != NULL; i = getbrother(i))
 		runast(i);
 	return -1;
 }
@@ -244,21 +270,21 @@ int runvardeclnode(tree* node)
 int runstmtlistnode(tree* node)
 {
 	tree *i;
-	for(i = node->child; i != NULL; i = i->brother)
+	for(i = getchild(node); i != NULL; i = getbrother(i))
 		runast(i);
 	return -1;
 }
 
 int runstmtnode(tree* node)
 {
-	if(node->child != NULL)
-		runast(node->child);
+	if(getchild(node) != NULL)
+		runast(getchild(node));
 	return -1;
 }
 
 int runassignstmtnode(tree* node)
 {
-	if((node->child==NULL) || (node->child->brother==NULL))
+	if((getchild(node)==NULL) || (getbrother(getchild(node))==NULL))
 	{
 		printf("Erro!\n");
 		exit(0);
@@ -266,8 +292,9 @@ int runassignstmtnode(tree* node)
 	else
 	{
 		int i, j;
-		i = runast(node->child);
-		j = runast(node->child->brother);
+		i = runast(getchild(node));
+		j = runast(getbrother(getchild(node)));
+		// printf("%d, %d\n",i,j);
 		store(i,j);
 	}
 	return -1;
@@ -275,28 +302,28 @@ int runassignstmtnode(tree* node)
 
 int runlvalnode(tree* node)
 {
-	return (node->tval);
+	return (gettval(node));
 }
 
 int runifstmtnode(tree* node)
 {
-	if(node->child==NULL)
+	if(getchild(node)==NULL)
 	{
 		printf("Erro!\n");
 		exit(0);
 	}
 	else
 	{
-		int i = runast(node->child);
+		int i = runast(getchild(node));
 		if(i == 1)
 		{
-			if(node->child->brother==NULL)
+			if(getbrother(getchild(node))==NULL)
 			{
 				printf("Erro!\n");
 				exit(0);
 			}
 			else
-				runast(node->child->brother);
+				runast(getbrother(getchild(node)));
 		}
 	}
 	return -1;
@@ -305,50 +332,52 @@ int runifstmtnode(tree* node)
 int runblocknode(tree* node)
 {
 	tree *i;
-	for(i = node->child; i != NULL; i = i->brother)
+	for(i = getchild(node); i != NULL; i = getbrother(i))
 		runast(i);
 	return -1;
 }
 
 int runwhilestmtnode(tree* node)
 {
-	if((node->child == NULL) || (node->child->brother == NULL))
+	if((getchild(node) == NULL) || (getbrother(getchild(node)) == NULL))
 	{
 		printf("Erro!\n");
 		exit(0);
 	}
 	else
 	{
-		int i = runast(node->child->brother);
+		int i = runast(getbrother(getchild(node)));
 		while(i == 1)
 		{
-			if(node->child == NULL)
+			if(getchild(node) == NULL)
 			{
 				printf("Erro!\n");
 				exit(0);
 			}
 			else
-				runast(node->child);
-			i = runast(node->child->brother);
+				runast(getchild(node));
+			i = runast(getbrother(getchild(node)));
 		}
 	}
 	return -1;
 }
 
-// int runreturnstmtnode(tree* node)
-// {
-// }
+int runreturnstmtnode(tree* node)
+{
+	return -1;
+}
 
-// int runfunccallnode(tree* node)
-// {
-// 	chamada = 1;
-// 	chamada = 0;
-// }
+int runfunccallnode(tree* node)
+{
+	chamada = 1;
+	chamada = 0;
+	return -1;
+}
 
 int runinputcallnode(tree* node)
 {
 	int i;
-	if(node->child==NULL)
+	if(getchild(node)==NULL)
 	{
 		printf("Erro!\n");
 		exit(0);
@@ -360,42 +389,72 @@ int runinputcallnode(tree* node)
 
 int runoutputcallnode(tree* node)
 {
-	if(node->child==NULL)
+	if(getchild(node)==NULL)
 	{
 		printf("Erro!\n");
 		exit(0);
 	}
 	else
 	{
-		int i = runast(node->child);
-		printf("%d\n",i);
+		int i = runast(getchild(node));
+		printf("%d\n",recover(i));
 	}
 	return -1;
 }
 
 int runwritecallnode(tree* node)
 {
-	if(node->child==NULL)
+	if(getchild(node)==NULL)
 	{
 		printf("Erro!\n");
 		exit(0);
 	}
 	else
 	{
-		int i = runast(node->child);
-		printf("write: %s\n",getliteral(lt,i));
+		int i = runast(getchild(node));
+		// printf("%s",getliteral(lt,i));
+		const char *v = getliteral(lt,i);
+		const char *aux;
+		for(aux = v; aux != NULL; aux++)
+		{
+			if(*aux == '\0')
+				return (aux - v);
+			else if(*aux == '\n')
+				printf("\n");
+			else if(*aux == '\\')
+			{
+				aux++;
+				switch(*aux)
+				{
+					case '0':
+						return (aux - v);
+					case 'n':
+						printf("\n");
+						break;
+					case 't':
+						printf("\t");
+						break;
+					default:
+						printf("Erro printf\n");
+						break;
+				}
+			}
+			else if(*aux != '\"')
+				printf("%c",*aux);
+		}
 	}
 	return -1;
 }
 
-// int runuserfunccallnode(tree* node)
-// {
-// }
+int runuserfunccallnode(tree* node)
+{
+	return -1;
+}
 
 int runoptarglistnode(tree* node)
 {
 	tree *i;
-	for(i = node->child; i != NULL; i = i->brother)
+	for(i = getchild(node); i != NULL; i = getbrother(i))
 		runast(i);
 	return -1;
 }
@@ -407,9 +466,13 @@ int runarglistnode(tree* node)
 
 int runboolexprnode(tree* node)
 {
-	int i = runast(node->child);
-	int j = runast(node->child->brother);
-	int k = runast(node->child->brother->brother);
+	int i = runast(getchild(node));
+	if(getkind(getchild(node)) == LVAL)
+		i = recover(i);
+	int j = runast(getbrother(getchild(node)));
+	int k = runast(getbrother(getbrother(getchild(node))));
+	if(getkind(getbrother(getbrother(getchild(node)))) == LVAL)
+		k = recover(k);
 	switch(j)
 	{
 		case 0: // LT
@@ -439,25 +502,30 @@ int runboolexprnode(tree* node)
 
 int runboolopnode(tree* node)
 {
-	return (node->tval);
+	return (gettval(node));
 }
 
 int runarithexprnode(tree* node)
 {
 	int i;
-	if(node->child==NULL)
+	if(getchild(node)==NULL)
 	{
 		printf("Erro!\n");
 		exit(0);
 	}
 	else
 	{
-		i = node->tval;
+		i = gettval(node);
 		int j, k;
 		if(i == -1) // ( arith-expr )
-			return runast(node->child);
-		j = runast(node->child);
-		k = runast(node->child->brother);
+			return runast(getchild(node));
+		j = runast(getchild(node));
+		if(getkind(getchild(node))==LVAL)
+			j = recover(j);
+		k = runast(getbrother(getchild(node)));
+		if(getkind(getbrother(getchild(node)))==LVAL)
+			k = recover(k);
+		// printf("%d,%d,%d\n",i,j,k);
 		switch(i)
 		{
 			case 0: // +
@@ -479,12 +547,17 @@ int runarithexprnode(tree* node)
 
 int runidnnode(tree* node)
 {
-	return (node->tval);
+	return (gettval(node));
 }
 
 int runstringnnode(tree* node)
 {
-	return (node->tval);
+	return (gettval(node));
+}
+
+int runnumnnode(tree *n)
+{
+	return gettval(n);
 }
 
 void execast(tree* arv,funtab *f, symtab *s, littab *l)
