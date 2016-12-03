@@ -2,6 +2,7 @@
  * Author: Marco Thome
  * Date: September 04, 2016
  */
+ 
 
 %option outfile="scanner.c"
 %option noyywrap
