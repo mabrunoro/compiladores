@@ -230,7 +230,7 @@ ifstmt:
 ;
 
 block:
-  LBRACE { scop = addscope(sct,scop); } optstmtlist { scop = supscope(sct,scop); } RBRACE		{ $$ = newsubtree(BLOCK,-1,1,$3); }
+  LBRACE { /*scop = addscope(sct,scop);*/ } optstmtlist { /*scop = supscope(sct,scop);*/ } RBRACE		{ $$ = newsubtree(BLOCK,-1,1,$3); }
 ;
 
 whilestmt:
@@ -328,7 +328,7 @@ int main() {
 		//printdot(arv);
 		/*printtree(arv);
 		printf("PARSE SUCESSFUL!\n");*/
-    
+
     inipilha();
     stdin = fopen(ctermid(NULL), "r");
     execast(arv,ft,st,lt);

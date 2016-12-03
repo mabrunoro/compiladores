@@ -1893,13 +1893,13 @@ yyreduce:
 
   case 44:
 #line 233 "parser.y" /* yacc.c:1646  */
-    { scop = addscope(sct,scop); }
+    { /*scop = addscope(sct,scop);*/ }
 #line 1898 "parser.c" /* yacc.c:1646  */
     break;
 
   case 45:
 #line 233 "parser.y" /* yacc.c:1646  */
-    { scop = supscope(sct,scop); }
+    { /*scop = supscope(sct,scop);*/ }
 #line 1904 "parser.c" /* yacc.c:1646  */
     break;
 
@@ -2366,7 +2366,7 @@ int main() {
 		//printdot(arv);
 		/*printtree(arv);
 		printf("PARSE SUCESSFUL!\n");*/
-    
+
     inipilha();
     stdin = fopen(ctermid(NULL), "r");
     execast(arv,ft,st,lt);

@@ -286,7 +286,7 @@ int runassignstmtnode(tree* node)
 {
 	if((getchild(node)==NULL) || (getbrother(getchild(node))==NULL))
 	{
-		printf("Erro!\n");
+		printf("Erro assign!\n");
 		exit(0);
 	}
 	else
@@ -307,24 +307,18 @@ int runlvalnode(tree* node)
 
 int runifstmtnode(tree* node)
 {
-	if(getchild(node)==NULL)
+	if((getchild(node)==NULL)||(getbrother(getchild(node))==NULL))
 	{
-		printf("Erro!\n");
+		printf("Erro if!\n");
 		exit(0);
 	}
 	else
 	{
 		int i = runast(getchild(node));
 		if(i == 1)
-		{
-			if(getbrother(getchild(node))==NULL)
-			{
-				printf("Erro!\n");
-				exit(0);
-			}
-			else
-				runast(getbrother(getchild(node)));
-		}
+			runast(getbrother(getchild(node)));
+		else if(getbrother(getbrother(getchild(node)))!=NULL)
+			runast(getbrother(getbrother(getchild(node))));
 	}
 	return -1;
 }
@@ -341,7 +335,7 @@ int runwhilestmtnode(tree* node)
 {
 	if((getchild(node) == NULL) || (getbrother(getchild(node)) == NULL))
 	{
-		printf("Erro!\n");
+		printf("Erro while!\n");
 		exit(0);
 	}
 	else
@@ -351,7 +345,7 @@ int runwhilestmtnode(tree* node)
 		{
 			if(getchild(node) == NULL)
 			{
-				printf("Erro!\n");
+				printf("Erro while child!\n");
 				exit(0);
 			}
 			else
@@ -377,13 +371,7 @@ int runfunccallnode(tree* node)
 int runinputcallnode(tree* node)
 {
 	int i;
-	if(getchild(node)==NULL)
-	{
-		printf("Erro!\n");
-		exit(0);
-	}
-	else
-		scanf("%d",&i);
+	scanf("%d",&i);
 	return i;
 }
 
@@ -391,13 +379,18 @@ int runoutputcallnode(tree* node)
 {
 	if(getchild(node)==NULL)
 	{
-		printf("Erro!\n");
+		printf("Erro output!\n");
 		exit(0);
 	}
 	else
 	{
 		int i = runast(getchild(node));
-		printf("%d\n",recover(i));
+		if(getkind(getchild(node))==LVAL)
+			printf("%d",recover(i));
+		else if((getkind(getchild(node))==NUMN)||(getkind(getchild(node))==ARITHEXPR))
+			printf("%d",i);
+		else
+			printf("Erro output tipo!\n");
 	}
 	return -1;
 }
@@ -406,7 +399,7 @@ int runwritecallnode(tree* node)
 {
 	if(getchild(node)==NULL)
 	{
-		printf("Erro!\n");
+		printf("Erro write!\n");
 		exit(0);
 	}
 	else
@@ -510,7 +503,7 @@ int runarithexprnode(tree* node)
 	int i;
 	if(getchild(node)==NULL)
 	{
-		printf("Erro!\n");
+		printf("Erro arith\n");
 		exit(0);
 	}
 	else
