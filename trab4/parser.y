@@ -136,8 +136,8 @@ optstmtlist:
 ;
 
 rettype:
-  INT			{ ltipo = 0; $$ = newsubtree(RETTYPE,INT,0); }
-| VOID			{ ltipo = 4; $$ = newsubtree(RETTYPE,VOID,0); }
+  INT			{ ltipo = 1; $$ = newsubtree(RETTYPE,1,0); }
+| VOID			{ ltipo = 0; $$ = newsubtree(RETTYPE,0,0); }
 ;
 
 params:
@@ -152,7 +152,7 @@ paramlist:
 
 param:
   INT ID					{ vpos = addvar(st,litpos,yylineno,0,scop); $$ = newsubtree(PARAM,vpos,0); }
-| INT ID LBRACK RBRACK		{ vpos = addvar(st,litpos,yylineno,0,scop); $$ = newsubtree(PARAM,vpos,0); }
+| INT ID LBRACK RBRACK		{ vpos = addvar(st,litpos,yylineno,1,scop); $$ = newsubtree(PARAM,vpos,0); }
 ;
 
 vardecllist:
@@ -170,13 +170,13 @@ vardecl:
 			}
 		 } SEMI	{ $$ = newsubtree(VARDECL,vpos,0); }
 | INT ID { int aux = lookupvar(st,litpos,scop);
-			if(aux == -1) addvar(st,litpos,yylineno,0,scop);
+			if(aux == -1) vpos = addvar(st,litpos,yylineno,1,scop);
 			else
 			{
 				printf("SEMANTIC ERROR (%d): variable '%s' already declared at line %d.\n",yylineno,getvarname(st,lt,aux),getvarline(st,aux));
 				exit(0);
 			}
-		 } LBRACK NUM RBRACK SEMI	{ $$ = newsubtree(VARDECL,INT,0); }
+		 } LBRACK NUM RBRACK SEMI	{ setvartype(st,vpos,numero); $$ = newsubtree(VARDECL,vpos,0); }
 ;
 
 stmtlist:
@@ -238,8 +238,8 @@ whilestmt:
 ;
 
 returnstmt:
-  RETURN SEMI				{ $$ = newsubtree(RETURNSTMT,-1,0); }
-| RETURN arithexpr SEMI		{ $$ = newsubtree(RETURNSTMT,-1,1,$2); }
+  RETURN SEMI				{ $$ = newsubtree(RETURNSTMT,0,0); }
+| RETURN arithexpr SEMI		{ $$ = newsubtree(RETURNSTMT,1,1,$2); }
 ;
 
 funccall:

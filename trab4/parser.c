@@ -1677,13 +1677,13 @@ yyreduce:
 
   case 14:
 #line 139 "parser.y" /* yacc.c:1646  */
-    { ltipo = 0; (yyval) = newsubtree(RETTYPE,INT,0); }
+    { ltipo = 1; (yyval) = newsubtree(RETTYPE,1,0); }
 #line 1682 "parser.c" /* yacc.c:1646  */
     break;
 
   case 15:
 #line 140 "parser.y" /* yacc.c:1646  */
-    { ltipo = 4; (yyval) = newsubtree(RETTYPE,VOID,0); }
+    { ltipo = 0; (yyval) = newsubtree(RETTYPE,0,0); }
 #line 1688 "parser.c" /* yacc.c:1646  */
     break;
 
@@ -1719,7 +1719,7 @@ yyreduce:
 
   case 21:
 #line 155 "parser.y" /* yacc.c:1646  */
-    { vpos = addvar(st,litpos,yylineno,0,scop); (yyval) = newsubtree(PARAM,vpos,0); }
+    { vpos = addvar(st,litpos,yylineno,1,scop); (yyval) = newsubtree(PARAM,vpos,0); }
 #line 1724 "parser.c" /* yacc.c:1646  */
     break;
 
@@ -1757,7 +1757,7 @@ yyreduce:
   case 26:
 #line 172 "parser.y" /* yacc.c:1646  */
     { int aux = lookupvar(st,litpos,scop);
-			if(aux == -1) addvar(st,litpos,yylineno,0,scop);
+			if(aux == -1) vpos = addvar(st,litpos,yylineno,1,scop);
 			else
 			{
 				printf("SEMANTIC ERROR (%d): variable '%s' already declared at line %d.\n",yylineno,getvarname(st,lt,aux),getvarline(st,aux));
@@ -1769,7 +1769,7 @@ yyreduce:
 
   case 27:
 #line 179 "parser.y" /* yacc.c:1646  */
-    { (yyval) = newsubtree(VARDECL,INT,0); }
+    { setvartype(st,vpos,numero); (yyval) = newsubtree(VARDECL,vpos,0); }
 #line 1774 "parser.c" /* yacc.c:1646  */
     break;
 
@@ -1917,13 +1917,13 @@ yyreduce:
 
   case 48:
 #line 241 "parser.y" /* yacc.c:1646  */
-    { (yyval) = newsubtree(RETURNSTMT,-1,0); }
+    { (yyval) = newsubtree(RETURNSTMT,0,0); }
 #line 1922 "parser.c" /* yacc.c:1646  */
     break;
 
   case 49:
 #line 242 "parser.y" /* yacc.c:1646  */
-    { (yyval) = newsubtree(RETURNSTMT,-1,1,(yyvsp[-1])); }
+    { (yyval) = newsubtree(RETURNSTMT,1,1,(yyvsp[-1])); }
 #line 1928 "parser.c" /* yacc.c:1646  */
     break;
 

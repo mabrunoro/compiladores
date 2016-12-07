@@ -141,9 +141,9 @@ const char * getenumname(int i,int j)
 		break;
 
 		case RETTYPE:
-		if(j == INT)
+		if(j == 1)
 			return "INT";
-		else if(j == VOID)
+		else if(j == 0)
 			return "VOID";
 		else
 			return "RETTYPE";

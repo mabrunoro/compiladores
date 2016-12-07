@@ -11,8 +11,8 @@ int factorial(int n) {
 }
 
 void main(void) {
-    int x;
     int f;
+    int x;
 
     x = input(); // Input an integer.
     output(factorial(x)); // Output factorial of x.

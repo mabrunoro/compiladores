@@ -5,8 +5,12 @@
 #include "interpreter.h"
 
 int *pilha;
-int pos;
+// int pos;
 int chamada;
+
+int fp;
+int sp;
+int pcount;	// auxiliar para contagem e associação de parâmetros
 
 funtab *ft;
 symtab *st;
@@ -14,27 +18,41 @@ littab *lt;
 
 void inipilha()
 {
-	pos = 0;
+	// posmax = 0;
 	chamada = 0;
+	fp = 0;
+	sp = 0;
 	pilha = (int *)malloc(STACKSIZE * (sizeof(int)));
 }
 
 void finpilha()
 {
 	free(pilha);
-	pos = 0;
+	// posmax = 0;
+}
+
+int push(int i)
+{
+	// printf("push: %d\n",i);
+	pilha[sp] = i;
+	return sp++;
+}
+
+int pop()
+{
+	return pilha[--fp];
 }
 
 void store(int var,int i)
 {
 	// printf("%d, %d\n",var,i);
-	pilha[var] = i;
+	pilha[fp+getvaroffset(st,var)] = i;
 	// printf("Guardado!\n");
 }
 
 int recover(int var)
 {
-	return pilha[var];
+	return pilha[fp+getvaroffset(st,var)];
 }
 
 int runast(tree *astree) {
@@ -141,7 +159,7 @@ int runast(tree *astree) {
 			break;
 
 		case USERFUNCCALL:
-			// return runuserfunccallnode(astree);
+			return runuserfunccallnode(astree);
 			break;
 
 		case OPTARGLIST:
@@ -207,6 +225,8 @@ int runfuncdeclnode(tree* node)
 
 int runfuncheadernode(tree* node)
 {
+	// associa variáveis de entrada com offset
+	runast(getbrother(getbrother(getchild(node))));
 	return -1;
 }
 
@@ -241,16 +261,24 @@ int runrettypenode(tree* node)
 
 int runparamsnode(tree* node)
 {
+	if(gettval(node)==0)
+		return -1;
+	runast(getchild(node));
 	return -1;
 }
 
 int runparamlistnode(tree* node)
 {
+	pcount = 0;
+	tree *i;
+	for(i = getchild(node); i != NULL; i = getbrother(i))
+		runast(i);
 	return -1;
 }
 
 int runparamnode(tree* node)
 {
+	setvaroffset(st,gettval(node),pcount++);
 	return -1;
 }
 
@@ -264,6 +292,17 @@ int runvardecllistnode(tree* node)
 
 int runvardeclnode(tree* node)
 {
+	int posvar = gettval(node);
+	int tipvar = getvartype(st,posvar);
+	if(tipvar == 0)	// número
+		setvaroffset(st,posvar,push(0));
+	else
+	{
+		setvaroffset(st,posvar,sp);
+		int i;
+		for(i = 0; i < tipvar; i++)
+			push(0);
+	}
 	return -1;
 }
 
@@ -296,8 +335,10 @@ int runassignstmtnode(tree* node)
 		j = runast(getbrother(getchild(node)));
 		// printf("%d, %d\n",i,j);
 		store(i,j);
+		// printf("%d = %s,%d\n",i,getvarname(st,lt,i),j);
+		// printf("\t%d\n",recover(i));
+		return j;
 	}
-	return -1;
 }
 
 int runlvalnode(tree* node)
@@ -315,6 +356,8 @@ int runifstmtnode(tree* node)
 	else
 	{
 		int i = runast(getchild(node));
+		// printf("%s: %d\n",getvarname(st,lt,i),recover(i));
+		// exit(0);
 		if(i == 1)
 			runast(getbrother(getchild(node)));
 		else if(getbrother(getbrother(getchild(node)))!=NULL)
@@ -340,7 +383,7 @@ int runwhilestmtnode(tree* node)
 	}
 	else
 	{
-		int i = runast(getbrother(getchild(node)));
+		int i = runast(getchild(node));
 		while(i == 1)
 		{
 			if(getchild(node) == NULL)
@@ -349,8 +392,8 @@ int runwhilestmtnode(tree* node)
 				exit(0);
 			}
 			else
-				runast(getchild(node));
-			i = runast(getbrother(getchild(node)));
+				runast(getbrother(getchild(node)));
+			i = runast(getchild(node));
 		}
 	}
 	return -1;
@@ -358,7 +401,16 @@ int runwhilestmtnode(tree* node)
 
 int runreturnstmtnode(tree* node)
 {
-	return -1;
+	if(gettval(node)==0)
+		return -1;
+	int aux = runast(getchild(node));
+
+	if(getkind(getchild(node))==LVAL)
+		aux = recover(aux);
+
+	// printf("return: %d\n",aux);
+	pilha[fp-1] = aux;
+	return aux;
 }
 
 int runfunccallnode(tree* node)
@@ -371,6 +423,7 @@ int runfunccallnode(tree* node)
 int runinputcallnode(tree* node)
 {
 	int i;
+	printf("input: ");
 	scanf("%d",&i);
 	return i;
 }
@@ -387,7 +440,7 @@ int runoutputcallnode(tree* node)
 		int i = runast(getchild(node));
 		if(getkind(getchild(node))==LVAL)
 			printf("%d",recover(i));
-		else if((getkind(getchild(node))==NUMN)||(getkind(getchild(node))==ARITHEXPR))
+		else if((getkind(getchild(node))==NUMN)||(getkind(getchild(node))==ARITHEXPR)||(getkind(getchild(node))==USERFUNCCALL))
 			printf("%d",i);
 		else
 			printf("Erro output tipo!\n");
@@ -441,7 +494,42 @@ int runwritecallnode(tree* node)
 
 int runuserfunccallnode(tree* node)
 {
-	return -1;
+	int i = lookupfunsimple(ft,gettval(node));
+	tree *func = getfuncdecl(ft,i);
+	if((getkind(func)!=FUNCDECL)||(getkind(getchild(func))!=FUNCHEADER))
+	{
+		printf("Erro userfunccall tipo!\n");
+		exit(0);
+	}
+
+	push(fp);
+
+	if(getfuntype(ft,i)==1)
+		push(0);
+
+	int aux = sp;
+
+	// insere parâmetros na pilha
+	runast(getchild(node));
+
+	// retorna o header da função
+	tree *head = getchild(func);
+
+	// associa os parâmtros às variáveis de entrada
+	if(getfunparam(ft,i)!=0)
+		runast(head);
+
+	fp = aux;
+
+	runast(getbrother(getchild(func)));
+
+	int ret = 0;
+	if(getfuntype(ft,i)==1)
+		ret = pop();
+	sp = fp - 1;
+	fp = pop();
+
+	return ret;
 }
 
 int runoptarglistnode(tree* node)
@@ -454,6 +542,15 @@ int runoptarglistnode(tree* node)
 
 int runarglistnode(tree* node)
 {
+	tree *i;
+	for(i = getchild(node); i != NULL; i = getbrother(i))
+	{
+		runast(i);
+		if(getkind(i)==LVAL)
+			push(recover(runast(i)));
+		else
+			push(runast(i));
+	}
 	return -1;
 }
 
@@ -466,6 +563,7 @@ int runboolexprnode(tree* node)
 	int k = runast(getbrother(getbrother(getchild(node))));
 	if(getkind(getbrother(getbrother(getchild(node)))) == LVAL)
 		k = recover(k);
+	// printf("i: %d, j: %d, k: %d\n",i,j,k);
 	switch(j)
 	{
 		case 0: // LT
@@ -540,6 +638,8 @@ int runarithexprnode(tree* node)
 
 int runidnnode(tree* node)
 {
+	// int i = gettval(node);
+	// printf("%s: %d",getliteral(lt,i),i);
 	return (gettval(node));
 }
 

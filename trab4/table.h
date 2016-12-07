@@ -73,6 +73,14 @@ int getvarscop(symtab* st, int i);
 // No check is made by this function, so make sure that the index is valid first.
 int getvarline(symtab* st, int i);
 
+int getvartype(symtab* st, int i);
+
+int getvaroffset(symtab* st, int i);
+
+void setvaroffset(symtab* st, int i, int os);
+
+void setvartype(symtab* st, int i, int type);
+
 // Prints the given table to stdout.
 void printsymtab(symtab* st,scotab* sct,littab* lt);
 
@@ -100,6 +108,8 @@ int getfunline(funtab* ft, int i);
 int getfunparam(funtab* ft,int i);
 
 int getfuntype(funtab* ft,int i);
+
+tree* getfuncdecl(funtab *ft, int i);
 
 void printfuntab(funtab* ft,littab* lt);
 

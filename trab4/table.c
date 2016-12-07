@@ -124,10 +124,11 @@ void freescotab(scotab* sct)
 
 typedef struct
 {
-	int type;
+	int type;		// indica se a variável é um vetor
 	int name;
 	int line;
 	int scope;
+	int offset;	// offset de acordo com fp, para não vetor, e com a origem
 }Sentry;
 
 struct symtable
@@ -174,6 +175,7 @@ int addvar(symtab* st, int lpos, int line, int t, int sc)
 	st->t[st->size].line = line;
 	st->t[st->size].type = t;
 	st->t[st->size].scope = sc;
+	st->t[st->size].offset = -1;
 	int old_side = st->size;
 	st->size++;
 	return old_side;
@@ -182,6 +184,11 @@ int addvar(symtab* st, int lpos, int line, int t, int sc)
 void setvartype(symtab* st, int i, int type)
 {
 	st->t[i].type = type;
+}
+
+void setvaroffset(symtab* st, int i, int os)
+{
+	st->t[i].offset = os;
 }
 
 const char* getvarname(symtab* st, littab* lt, int i)
@@ -202,6 +209,11 @@ int getvarscop(symtab* st, int i)
 int getvartype(symtab* st, int i)
 {
 	return st->t[i].type;
+}
+
+int getvaroffset(symtab* st, int i)
+{
+	return st->t[i].offset;
 }
 
 void removelastvar(symtab* st)
@@ -322,6 +334,14 @@ int getfuntype(funtab* ft,int i)
 		return -1;
 	else
 		return ft->t[i].type;
+}
+
+tree* getfuncdecl(funtab *ft, int i)
+{
+	if(i >= ft->size)
+		return NULL;
+	else
+		return ft->t[i].decl;
 }
 
 void printfuntab(funtab* ft,littab* lt)
